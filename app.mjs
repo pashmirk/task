@@ -2,7 +2,7 @@ import createHttpError from 'http-errors';
 import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
-import { router as indexRouter } from './routes/index.mjs';
+import { router as indexRouter } from './routes/v1/index.mjs';
 
 
 export const app = express();
@@ -27,3 +27,4 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+clea
