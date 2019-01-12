@@ -1,8 +1,8 @@
-import client from "redis";
+import redisClient from "./redis-client.mjs";
 
-export default function foo(key) {
+export default function get(key) {
     return new Promise((resolve, reject) => {
-        client.get(key, function(err, reply) {
+        redisClient.get(key, (err, reply) => {
             if (!err) {
                 resolve(reply);
             } else {

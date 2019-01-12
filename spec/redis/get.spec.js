@@ -1,18 +1,21 @@
 import foo from "./../../redis/get.mjs";
-import client from "redis";
+import * as client from "./../../redis/redis-client.mjs";
 
 fdescribe("redis", () => {
     describe("get", () => {
-        it('should return cache value by key', (done) => {
-            spyOn(client, 'get').and.returnValue('some value');
+        const redisClientMock = {
+            get: (key) => { value: "some value" },
+            set: (key, value)
+        };
 
-            foo('key').then(x => {
+        it('should return cache value by key', (done) => {
+            spyOn(client, 'createClient').and.returnValue(redisClientMock);
+
+            get('key').then(x => {
+                console.log('HELLO')
                 expect(x).toBeUndefined();
                 done();
             });
-
-
-
         });
     });
 });

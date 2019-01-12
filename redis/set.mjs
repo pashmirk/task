@@ -1,7 +1,7 @@
-import client from "redis";
+import redisClient from "./redis-client.mjs";
 
 const DEFAULT_LIFETIME = 300;
 
 export default function set(key, value) {
-    client.set(key, value, 'EX', DEFAULT_LIFETIME)
+    redisClient.set(key, value, 'EX', DEFAULT_LIFETIME)
 }
