@@ -1,11 +1,11 @@
-import redisClient from "./redis-client.mjs";
-
-export default function get(key) {
+export default function get(cache, key) {
+    console.log('key:::', key);
     return new Promise((resolve, reject) => {
-        redisClient.get(key, (err, reply) => {
+        cache.get(key, (err, reply) => {
             if (!err) {
                 resolve(reply);
             } else {
+                console.log('GET result ->' + err);
                 reject(err)
             }
         });

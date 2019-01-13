@@ -1,22 +1,24 @@
 import fetchData from './../fetch-data.mjs';
-import redisClient from './../../redis/index.mjs';
+import cache from './../../cache/index.mjs';
 
-const get = async(req, res) => {
+const get = async(req, respond) => {
     try {
-        const data = await fetchData(`${process.env.UNRELIABLE_API_URL_BASE}/drones/`);
-        res.send(data);
+        let url = `${process.env.UNRELIABLE_API_URL_BASE}/drones/`;
+        const data = await fetchData(url);
 
-        await redisClient.set(url, data);
-        next();
+        await respond.send(data);
+        console.log('REDIS CLIENT', cache);
+
+        cache.set(url, data);
 
     } catch (error) {
         try {
-            let cachedData = await redisClient.get(url);
-            console.log('cached data:', cachedData)
-            res.send(cachedData);
-            next();
+            let cachedData = await cache.get(url);
+            console.log('cached data:', cachedData);
+
+            respond.send(cachedData);
         } catch {
-            res.status(404).send({ error: 'No data is available at the moment.' }).end();
+            respond.status(404).send({ error: 'No data is available at the moment.' }).end();
         }
     }
 }

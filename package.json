@@ -3,8 +3,8 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "node --experimental-modules start.mjs",
-        "watch": "nodemon --experimental-modules start.mjs",
+        "start": "node --experimental-modules --inspect start.mjs",
+        "watch": "nodemon --experimental-modules --inspect start.mjs",
         "mock": "node ./node_modules/.bin/mockserver -p 8080 -m mock-ureliable-api",
         "test": "jasmine"
     },
