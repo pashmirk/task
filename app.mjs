@@ -4,12 +4,19 @@ import morgan from 'morgan';
 import path from 'path';
 import errorHandler from './utils/error-handler.mjs';
 import { router as indexRouter } from './routes/v1/index.mjs';
+import dotenv from 'dotenv';
 
 export const app = express();
+
+dotenv.config();
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+    res.header('Content-Type', 'application/json');
+    next();
+});
 app.use('/', indexRouter);
 app.use((req, res, next) => {
     next(createHttpError(404));

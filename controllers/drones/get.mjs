@@ -1,14 +1,24 @@
-import fetchData from './../fetch-data.mjs'
+import fetchData from './../fetch-data.mjs';
+import redisClient from './../../redis/index.mjs';
 
-var url = "http://localhost:8080/drones/";
 const get = async(req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(await fetchData(url));
+    try {
+        const data = await fetchData(`${process.env.UNRELIABLE_API_URL_BASE}/drones/`);
+        res.send(data);
 
-    // get from the api
-    // cash
-    // when fails get from cach
-    // no cash return some message 
+        await redisClient.set(url, data);
+        next();
+
+    } catch (error) {
+        try {
+            let cachedData = await redisClient.get(url);
+            console.log('cached data:', cachedData)
+            res.send(cachedData);
+            next();
+        } catch {
+            res.status(404).send({ error: 'No data is available at the moment.' }).end();
+        }
+    }
 }
 
 export default get;
